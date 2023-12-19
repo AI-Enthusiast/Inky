@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Navigate to the directory where your project is located
-cd /home/pi/Code/Metropolis/source/what_weather
+cd /home/pi/Code/Inky
 
 # Pull the latest changes from your GitHub repository
 git fetch
@@ -18,4 +18,4 @@ git pull
 # # Run the Python script and log the job run
 # time python ~/home/pi/Code/Metropolis/source/what_weather/what_weather.py 1>> ~/home/pi/Code/Metropolis/source/what_weather/log/logfile_${run_date}.log 2>> ~/home/pi/Code/Metropolis/source/what_weather/log/errfile_${run_date}.lo
 
-bash /home/pi/Code/Metropolis/source/what_weather/bin/run_what_weather.sh
+bash /home/pi/Code/Inky/bin/run_what_weather.sh
