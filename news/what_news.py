@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 # import pandas as pd
 import os
 import random
-root = os.path.dirname(os.path.abspath('rss_proto.ipynb'))
+root = os.path.dirname(os.path.abspath('what_news.py'))
 
 inky_display = InkyWHAT("black")
 inky_display.set_border(inky_display.WHITE)
