@@ -14,7 +14,6 @@ parser.add_argument('--color', '-c', type=str, required=False, choices=DISPLAY_C
 color = parser.parse_args().color
 if color is None:
     color = "black"
-print(color, type(color))
 # determin screen type (black, red, yellow)
 inky_display = InkyWHAT(color)
 
