@@ -32,11 +32,10 @@ def choose_random_image(folder):
     return image
 
 # 3. display in on the inky display
-if __name__ == '__main__':
+def create_image(inky_display, color="black"):
     folder = choose_random_folder()
     image = choose_random_image(folder)
 
-    inky_display = InkyWHAT("black")
     inky_display.set_border(inky_display.WHITE)
     img = Image.open(root + '/images/' + folder + '/' + image)
 

@@ -18,4 +18,5 @@ git pull
 # # Run the Python script and log the job run
 # time python ~/home/pi/Code/Metropolis/source/what_weather/what_weather.py 1>> ~/home/pi/Code/Metropolis/source/what_weather/log/logfile_${run_date}.log 2>> ~/home/pi/Code/Metropolis/source/what_weather/log/errfile_${run_date}.lo
 
-bash /home/pi/Code/Inky/bin/run_what_weather.sh
+# run the script
+python3 __init__.py

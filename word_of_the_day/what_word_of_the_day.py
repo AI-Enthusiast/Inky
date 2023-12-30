@@ -46,7 +46,7 @@ def get_definition():
     return definition
 
 
-def creat_wotd_image(inky_display, color="black"):
+def create_image(inky_display, color="black"):
     inky_display.set_border(inky_display.WHITE)
     img = Image.new("P", (inky_display.WIDTH, inky_display.HEIGHT))
     draw = ImageDraw.Draw(img)
