@@ -25,7 +25,7 @@ def choose_random_folder():
 # 2. choose a random image from that folder
 def choose_random_image(folder):
     # get all images in the folder
-    images = os.listdir('images/' + folder)
+    images = os.listdir(root + '/images/' + folder)
     # choose a random image
     image = images[random.randint(0, len(images) - 1)]
     print('chose image: ' + image)
