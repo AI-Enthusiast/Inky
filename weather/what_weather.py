@@ -11,10 +11,6 @@ root = os.path.dirname(os.path.abspath('what_weather.py.py'))
 
 config = configparser.ConfigParser()
 config.read(root + '/weather/config.ini')
-print(root + '/weather/config.ini')
-print(config.sections())
-print(config['LOCATION']['lat'])
-print(config['LOCATION']['long'])
 
 open_weather_api_key = '98e4a007bd3bde27d02a178913ba6a1f'
 one_call = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + config['LOCATION']['lat'] \
