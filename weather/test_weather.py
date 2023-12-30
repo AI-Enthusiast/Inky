@@ -1,5 +1,6 @@
 from inky import InkyWHAT
 from what_weather import create_image as create_weather_image
+import argparse
 
 # color options:
 DISPLAY_COLORS = ["black", "red", "yellow"]
