@@ -11,7 +11,8 @@ root = os.path.dirname(os.path.abspath('what_weather.py.py'))
 
 config = configparser.ConfigParser()
 config.read(root + '/config.ini')
-
+print(root + '/config.ini')
+print(config.sections())
 print(config['LOCATION']['lat'])
 print(config['LOCATION']['long'])
 
