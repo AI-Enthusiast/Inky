@@ -12,6 +12,7 @@ DISPLAY_COLORS = ["black", "red", "yellow"]
 parser = argparse.ArgumentParser()
 parser.add_argument('--color', '-c', type=str, required=False, choices=DISPLAY_COLORS, help="Display colour")
 color = parser.parse_args().color
+print(color, type(color))
 # determin screen type (black, red, yellow)
 inky_display = InkyWHAT(color)
 
