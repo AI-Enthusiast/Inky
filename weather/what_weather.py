@@ -9,6 +9,10 @@ from font_source_sans_pro import SourceSansProSemibold
 
 config = configparser.ConfigParser()
 config.read('config.ini')
+
+print(config['LOCATION']['lat'])
+print(config['LOCATION']['long'])
+
 open_weather_api_key = '98e4a007bd3bde27d02a178913ba6a1f'
 one_call = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + config['LOCATION']['lat'] \
            + '&lon=' + config['LOCATION']['long'] + '&appid=' + config['OW_API']['key']
