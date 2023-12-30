@@ -1,3 +1,4 @@
+import os
 import time
 import requests
 import configparser
@@ -6,9 +7,10 @@ from datetime import datetime
 from PIL import Image, ImageFont, ImageDraw
 from font_source_sans_pro import SourceSansProSemibold
 
+root = os.path.dirname(os.path.abspath('what_weather.py.py'))
 
 config = configparser.ConfigParser()
-config.read('config.ini')
+config.read(root + '/config.ini')
 
 print(config['LOCATION']['lat'])
 print(config['LOCATION']['long'])
