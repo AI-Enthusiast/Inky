@@ -19,4 +19,4 @@ git pull
 # time python ~/home/pi/Code/Metropolis/source/what_weather/what_weather.py 1>> ~/home/pi/Code/Metropolis/source/what_weather/log/logfile_${run_date}.log 2>> ~/home/pi/Code/Metropolis/source/what_weather/log/errfile_${run_date}.lo
 
 # run the script
-python3 __init__.py --color yellow
+python3 __init__.py --color black
