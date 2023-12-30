@@ -10,8 +10,8 @@ from font_source_sans_pro import SourceSansProSemibold
 root = os.path.dirname(os.path.abspath('what_weather.py.py'))
 
 config = configparser.ConfigParser()
-config.read(root + '/what_weather/config.ini')
-print(root + '/what_weather/config.ini')
+config.read(root + '/weather/config.ini')
+print(root + '/weather/config.ini')
 print(config.sections())
 print(config['LOCATION']['lat'])
 print(config['LOCATION']['long'])
