@@ -78,8 +78,4 @@ def create_image(inky_display, color="black"):
     # challenge_word = image.split('_')[0]
     # draw.text((5, 5), challenge_word, inky_display.BLACK, font=font_main)
 
-    # display the image
-
-    img = img.rotate(180)  # flip the image so it's right side up
-    inky_display.set_image(img)
-    inky_display.show()
+    return img
