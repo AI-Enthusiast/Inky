@@ -1,4 +1,4 @@
-from .what_weather import create_image as create_weather_image
+from what_weather import create_image as create_weather_image
 
 
 def display_weather(inky_display, display_color):
