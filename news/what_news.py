@@ -1,4 +1,3 @@
-from inky import InkyWHAT
 from PIL import Image, ImageFont, ImageDraw
 from font_source_sans_pro import SourceSansProSemibold
 from font_fredoka_one import FredokaOne
