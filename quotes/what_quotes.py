@@ -121,6 +121,10 @@ while not below_max_length:
     person = random.choice(people)           # Pick a random person from our list
     quote = wikiquotes.random_quote(person, "english")
 
+    # make sure the quote is not just someone's name
+    if quote.count(" ") < 2:
+        continue
+
     reflowed = reflow_quote(quote, max_width, quote_font)
     p_w, p_h = getsize(quote_font, reflowed)  # Width and height of quote
     p_h = p_h * (reflowed.count("\n") + 1)   # Multiply through by number of lines
