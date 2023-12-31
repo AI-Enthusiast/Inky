@@ -12,7 +12,7 @@ root = os.path.dirname(os.path.realpath("what_deviation.py"))
 # 1. choose a random folder from images
 def choose_random_folder():
     # get all folders in /images/
-    folders = os.listdir('images')
+    folders = os.listdir(root + '/deviant_art/images/')
     # choose a random folder
     folder = folders[random.randint(0, len(folders) - 1)]
     if folder == '.keep':
