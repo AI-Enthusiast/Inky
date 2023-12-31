@@ -17,4 +17,4 @@ time python3 __init__.py --color yellow 1>> ~/Code/Inky/log/logfile_${run_date}.
 
 
 # run the script
-python3 __init__.py --color yellow
+# python3 __init__.py --color yellow
