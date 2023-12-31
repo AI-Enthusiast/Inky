@@ -6,7 +6,7 @@ from PIL import Image, ImageFont, ImageDraw
 
 # find drive
 def get_drive():
-    drives = os.listdir('/media/')
+    drives = os.listdir('/media/pi/')
     # return random drive
     drive_choice = random.choice(drives)
     print('chose drive: ' + drive_choice)
@@ -14,7 +14,7 @@ def get_drive():
 
 # find image
 def get_image(drive):
-    images = os.listdir('/media/' + drive)
+    images = os.listdir('/media/pi/' + drive)
     # return random image
     image_choice = random.choice(images)
     print('chose image: ' + image_choice)
@@ -25,7 +25,7 @@ def create_image(inky_display, color='black'):
     image = get_image(drive)
 
     inky_display.set_border(inky_display.WHITE)
-    img = Image.open('/media/' + drive + '/' + image)
+    img = Image.open('/media/pi/' + drive + '/' + image)
 
     w, h = img.size
     ptype = ''
