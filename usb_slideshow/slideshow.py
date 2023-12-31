@@ -20,7 +20,7 @@ def get_image(drive):
     print('chose image: ' + image_choice)
     return image_choice
 
-def create_image(inky_display, color=black):
+def create_image(inky_display, color='black'):
     drive = get_drive()
     image = get_image(drive)
 
