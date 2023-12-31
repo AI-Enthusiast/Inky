@@ -25,7 +25,7 @@ def choose_random_folder():
 # 2. choose a random image from that folder
 def choose_random_image(folder):
     # get all images in the folder
-    images = os.listdir(root + '/images/' + folder)
+    images = os.listdir(root + '/deviant_art/images/' + folder)
     # choose a random image
     image = images[random.randint(0, len(images) - 1)]
     print('chose image: ' + image)
@@ -37,7 +37,7 @@ def create_image(inky_display, color="black"):
     image = choose_random_image(folder)
 
     inky_display.set_border(inky_display.WHITE)
-    img = Image.open(root + '/images/' + folder + '/' + image)
+    img = Image.open(root + '/deviant_art/images/' + folder + '/' + image)
 
     w, h = img.size
     ptype = ''
