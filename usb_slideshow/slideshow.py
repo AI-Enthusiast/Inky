@@ -18,6 +18,10 @@ def get_image(drive):
     # return random image
     image_choice = random.choice(images)
     print('chose image: ' + image_choice)
+    # make sure it's a jpg
+    if image_choice[-3:] != 'jpg':
+        print('image is not a jpg, choosing another')
+        return get_image(drive)
     return image_choice
 
 def create_image(inky_display, color='black'):
