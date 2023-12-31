@@ -2,9 +2,7 @@
 # diplay in on the inky display
 from datetime import datetime
 import random
-from inky import InkyWHAT
 from PIL import Image, ImageFont, ImageDraw
-from font_source_sans_pro import SourceSansProSemibold
 import os
 
 root = os.path.dirname(os.path.realpath("what_deviation.py"))
@@ -42,7 +40,7 @@ def create_image(inky_display, color="black"):
     w, h = img.size
     ptype = ''
     # determin if imgage is portrait or landscape
-    ptype = 'landscape' if w > h else 'portrait'
+    ptype = 'landscape' if w >= h else 'portrait'
 
     if ptype == 'landscape':
         h_new = 300
