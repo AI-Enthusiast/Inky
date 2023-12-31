@@ -18,7 +18,8 @@ if color is None:
 inky_display = InkyWHAT(color)
 
 # pick at random a news or word of the day
-choices = {"news": display_news, "wotd": display_wotd, "deviation": display_deviation, "weather": display_weather}
+# choices = {"news": display_news, "wotd": display_wotd, "deviation": display_deviation, "weather": display_weather}
+choices = {"deviation": display_deviation}
 choice = random.choice(list(choices.keys()))
 choices[choice](inky_display, color)
 
