@@ -461,4 +461,5 @@ def create_image(inky_display, color="black"):
     #
     # # Display image on Inky wHAT in the botom left corner
     # img.paste(graph_img, (0, 75))
+    print('Temperature: ' + str(current_temp))
     return img

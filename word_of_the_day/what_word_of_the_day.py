@@ -106,5 +106,8 @@ def create_image(inky_display, color="black"):
     x = 10
     y = 200 / 2 - h / 2
     draw.text((x, y), definition, inky_display.BLACK, font=font_xlarge)
-
+    print('Word: ' + word)
+    print('Pronunciation: ' + pronunciation)
+    print('Part of speach: ' + part_of_speach)
+    print('Definition: ' + definition)
     return img
