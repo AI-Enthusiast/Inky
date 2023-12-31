@@ -98,7 +98,6 @@ def create_image(inky_display, color="black"):
         "Dorothy Hodgkin",
         "Edith Clarke",
         "Grace Hopper",
-        "Hedy Lamarr",
         "Isaac Newton",
         "James Clerk Maxwell",
         "Margaret Hamilton",
