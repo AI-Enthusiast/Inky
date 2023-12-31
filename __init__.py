@@ -5,6 +5,7 @@ from word_of_the_day import display_wotd
 from deviant_art import display_deviation
 from usb_slideshow import display_slideshow
 from weather import display_weather
+from quotes import display_quote
 import argparse
 import random
 
@@ -20,7 +21,7 @@ inky_display = InkyWHAT(color)
 
 # pick at random a news or word of the day
 choices = {"news": display_news, "wotd": display_wotd, "deviation": display_deviation,
-           "weather": display_weather, "slideshow": display_slideshow}
+           "weather": display_weather, "slideshow": display_slideshow, "quote": display_quote}
 choice = random.choice(list(choices.keys()))
 choices[choice](inky_display, color)
 

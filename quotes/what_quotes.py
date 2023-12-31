@@ -29,12 +29,6 @@ Install with:
 """)
     sys.exit(1)
 
-# Set up the correct display and scaling factors
-
-inky_display = auto(ask_user=True, verbose=True)
-inky_display.set_border(inky_display.WHITE)
-# inky_display.set_rotation(180)
-
 def getsize(font, text):
     _, _, right, bottom = font.getbbox(text)
     return (right, bottom)
@@ -62,125 +56,131 @@ def reflow_quote(quote, width, font):
 
     return reflowed
 
+def create_image(inky_display, color="black"):
+    def get_quote(person):
+        quote = wikiquotes.random_quote(person, "english")
 
-WIDTH = inky_display.width
-HEIGHT = inky_display.height
-
-# Create a new canvas to draw on
-
-img = Image.new("P", (WIDTH, HEIGHT))
-draw = ImageDraw.Draw(img)
-
-# Load the fonts
-
-font_size = 24
-
-author_font = ImageFont.truetype(SourceSerifProSemibold, font_size)
-quote_font = ImageFont.truetype(SourceSansProSemibold, font_size)
+        # make sure the quote is not just someone's name
+        if quote.count(" ") < 3:
+            print("Rejected quote: " + quote, "\t - " + person + "\n")
+            return get_quote(person)
+        else:
+            return quote
 
 
-# A list of famous scientists to search for quotes from
-# on https://en.wikiquote.org. Change them to your
-# favourite people, if you like!
 
-people = [
-    "Ada Lovelace",
-    "Carl Sagan",
-    "Charles Darwin",
-    "Dorothy Hodgkin",
-    "Edith Clarke",
-    "Grace Hopper",
-    "Hedy Lamarr",
-    "Isaac Newton",
-    "James Clerk Maxwell",
-    "Margaret Hamilton",
-    "Marie Curie",
-    "Michael Faraday",
-    "Niels Bohr",
-    "Nikola Tesla",
-    "Rosalind Franklin",
-    "Stephen Hawking"
-]
+    inky_display.set_border(inky_display.WHITE)
 
-# The amount of padding around the quote. Note that
-# a value of 30 means 15 pixels padding left and 15
-# pixels padding right.
-#
-# Also define the max width and height for the quote.
+    WIDTH = inky_display.width
+    HEIGHT = inky_display.height
 
-padding = 50
-max_width = WIDTH - padding
-max_height = HEIGHT - padding - getsize(author_font, "ABCD ")[1]
+    # Create a new canvas to draw on
 
-below_max_length = False
+    img = Image.new("P", (WIDTH, HEIGHT))
+    draw = ImageDraw.Draw(img)
 
-# Only pick a quote that will fit in our defined area
-# once rendered in the font and size defined.
+    # Load the fonts
 
-while not below_max_length:
-    person = random.choice(people)           # Pick a random person from our list
-    quote = wikiquotes.random_quote(person, "english")
+    font_size = 24
 
-    # make sure the quote is not just someone's name
-    if quote.count(" ") < 2:
-        continue
+    author_font = ImageFont.truetype(SourceSerifProSemibold, font_size)
+    quote_font = ImageFont.truetype(SourceSansProSemibold, font_size)
 
-    reflowed = reflow_quote(quote, max_width, quote_font)
-    p_w, p_h = getsize(quote_font, reflowed)  # Width and height of quote
-    p_h = p_h * (reflowed.count("\n") + 1)   # Multiply through by number of lines
 
-    if p_h < max_height:
-        below_max_length = True              # The quote fits! Break out of the loop.
+    # A list of famous scientists to search for quotes from
+    # on https://en.wikiquote.org. Change them to your
+    # favourite people, if you like!
 
-    else:
-        continue
+    people = [
+        "Ada Lovelace",
+        "Carl Sagan",
+        "Charles Darwin",
+        "Dorothy Hodgkin",
+        "Edith Clarke",
+        "Grace Hopper",
+        "Hedy Lamarr",
+        "Isaac Newton",
+        "James Clerk Maxwell",
+        "Margaret Hamilton",
+        "Marie Curie",
+        "Michael Faraday",
+        "Niels Bohr",
+        "Nikola Tesla",
+        "Rosalind Franklin",
+        "Stephen Hawking"
+    ]
 
-# x- and y-coordinates for the top left of the quote
+    # The amount of padding around the quote. Note that
+    # a value of 30 means 15 pixels padding left and 15
+    # pixels padding right.
+    #
+    # Also define the max width and height for the quote.
 
-quote_x = (WIDTH - max_width) / 2
-quote_y = ((HEIGHT - max_height) + (max_height - p_h - getsize(author_font, "ABCD ")[1])) / 2
+    padding = 50
+    max_width = WIDTH - padding
+    max_height = HEIGHT - padding - getsize(author_font, "ABCD ")[1]
 
-# x- and y-coordinates for the top left of the author
+    below_max_length = False
 
-author_x = quote_x
-author_y = quote_y + p_h
+    # Only pick a quote that will fit in our defined area
+    # once rendered in the font and size defined.
 
-author = "- " + person
+    while not below_max_length:
+        person = random.choice(people)           # Pick a random person from our list
+        quote = get_quote(person)                # Get a quote from them
 
-# Draw red rectangles top and bottom to frame quote
+        reflowed = reflow_quote(quote, max_width, quote_font)
+        p_w, p_h = getsize(quote_font, reflowed)  # Width and height of quote
+        p_h = p_h * (reflowed.count("\n") + 1)   # Multiply through by number of lines
 
-draw.rectangle(
-    (
-        padding / 4,
-        padding / 4,
-        WIDTH - (padding / 4),
-        quote_y - (padding / 4)
-    ), fill=inky_display.RED)
+        if p_h < max_height:
+            below_max_length = True              # The quote fits! Break out of the loop.
 
-draw.rectangle(
-    (
-        padding / 4,
-        author_y + getsize(author_font, "ABCD ")[1] + (padding / 4) + 5,
-        WIDTH - (padding / 4),
-        HEIGHT - (padding / 4)
-    ), fill=inky_display.RED)
+        else:
+            continue
 
-# Add some white hatching to the red rectangles to make
-# it look a bit more interesting
+    # x- and y-coordinates for the top left of the quote
 
-hatch_spacing = 12
+    quote_x = (WIDTH - max_width) / 2
+    quote_y = ((HEIGHT - max_height) + (max_height - p_h - getsize(author_font, "ABCD ")[1])) / 2
 
-for x in range(0, 2 * WIDTH, hatch_spacing):
-    draw.line((x, 0, x - WIDTH, HEIGHT), fill=inky_display.WHITE, width=3)
+    # x- and y-coordinates for the top left of the author
 
-# Write our quote and author to the canvas
+    author_x = quote_x
+    author_y = quote_y + p_h
 
-draw.multiline_text((quote_x, quote_y), reflowed, fill=inky_display.BLACK, font=quote_font, align="left")
-draw.multiline_text((author_x, author_y), author, fill=inky_display.RED, font=author_font, align="left")
+    author = "- " + person
 
-print(reflowed + "\n" + author + "\n")
+    # Draw red rectangles top and bottom to frame quote
 
-# Display the completed canvas on Inky wHAT
+    draw.rectangle(
+        (
+            padding / 4,
+            padding / 4,
+            WIDTH - (padding / 4),
+            quote_y - (padding / 4)
+        ), fill=inky_display.RED)
 
-inky_display.set_image(img)
-inky_display.show()
+    draw.rectangle(
+        (
+            padding / 4,
+            author_y + getsize(author_font, "ABCD ")[1] + (padding / 4) + 5,
+            WIDTH - (padding / 4),
+            HEIGHT - (padding / 4)
+        ), fill=inky_display.RED)
+
+    # Add some white hatching to the red rectangles to make
+    # it look a bit more interesting
+
+    hatch_spacing = 12
+
+    for x in range(0, 2 * WIDTH, hatch_spacing):
+        draw.line((x, 0, x - WIDTH, HEIGHT), fill=inky_display.WHITE, width=3)
+
+    # Write our quote and author to the canvas
+
+    draw.multiline_text((quote_x, quote_y), reflowed, fill=inky_display.BLACK, font=quote_font, align="left")
+    draw.multiline_text((author_x, author_y), author, fill=inky_display.RED, font=author_font, align="left")
+
+    print(reflowed + "\n" + author + "\n")
+    return img
