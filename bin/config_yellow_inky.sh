@@ -8,9 +8,8 @@ git fetch
 git checkout
 git pull
 
-
 # Initiate logging
-run_date="$(date +'%Y-%m-%d')"
+run_date="$(date +'%Y-%m-%d--%H-%M')"
 exec 2>> ~/home/pi/Code/Inky/log/logfile_parent_${run_date}.log
 
 # Run the Python script and log the job run
