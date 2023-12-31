@@ -7,7 +7,7 @@ from PIL import Image, ImageFont, ImageDraw
 from font_source_sans_pro import SourceSansProSemibold
 import os
 
-root = os.path.dirname(os.path.realpath("display_deviation.py"))
+root = os.path.dirname(os.path.realpath("what_deviation.py"))
 
 # 1. choose a random folder from images
 def choose_random_folder():

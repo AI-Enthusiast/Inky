@@ -1,5 +1,5 @@
 from inky import InkyWHAT
-from display_deviation import create_image as create_deviation_image
+from what_deviation import create_image as create_deviation_image
 import argparse
 
 # color options:
