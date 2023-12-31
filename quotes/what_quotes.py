@@ -61,7 +61,8 @@ def create_image(inky_display, color="black"):
         quote = wikiquotes.random_quote(person, "english")
 
         # make sure the quote is not just someone's name
-        if quote.count(" ") < 3:
+        paren_removed = quote.split('(')[0]
+        if paren_removed.count(" ") < 3:
             print("Rejected quote: " + quote, "\t - " + person + "\n")
             return get_quote(person)
         else:
