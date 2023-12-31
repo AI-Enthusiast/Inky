@@ -8,7 +8,7 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
 
-root = os.path.dirname(os.path.realpath('jack_the_ripper.py'))
+root = os.path.dirname(os.path.realpath('deviant_art_scraper.py'))
 kill_date = 7  # days
 
 # 1. get the date

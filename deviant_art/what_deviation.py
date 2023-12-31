@@ -7,12 +7,12 @@ from PIL import Image, ImageFont, ImageDraw
 from font_source_sans_pro import SourceSansProSemibold
 import os
 
-root = os.path.dirname(os.path.realpath("display_deviation.py"))
+root = os.path.dirname(os.path.realpath("what_deviation.py"))
 
 # 1. choose a random folder from images
 def choose_random_folder():
     # get all folders in /images/
-    folders = os.listdir('images')
+    folders = os.listdir(root + '/deviant_art/images/')
     # choose a random folder
     folder = folders[random.randint(0, len(folders) - 1)]
     if folder == '.keep':
@@ -25,20 +25,19 @@ def choose_random_folder():
 # 2. choose a random image from that folder
 def choose_random_image(folder):
     # get all images in the folder
-    images = os.listdir('images/' + folder)
+    images = os.listdir(root + '/deviant_art/images/' + folder)
     # choose a random image
     image = images[random.randint(0, len(images) - 1)]
     print('chose image: ' + image)
     return image
 
 # 3. display in on the inky display
-if __name__ == '__main__':
+def create_image(inky_display, color="black"):
     folder = choose_random_folder()
     image = choose_random_image(folder)
 
-    inky_display = InkyWHAT("black")
     inky_display.set_border(inky_display.WHITE)
-    img = Image.open(root + '/images/' + folder + '/' + image)
+    img = Image.open(root + '/deviant_art/images/' + folder + '/' + image)
 
     w, h = img.size
     ptype = ''
@@ -79,8 +78,4 @@ if __name__ == '__main__':
     # challenge_word = image.split('_')[0]
     # draw.text((5, 5), challenge_word, inky_display.BLACK, font=font_main)
 
-    # display the image
-
-    img = img.rotate(180)  # flip the image so it's right side up
-    inky_display.set_image(img)
-    inky_display.show()
+    return img

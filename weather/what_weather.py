@@ -1,52 +1,340 @@
-from datetime import datetime
+import os
+import time
+import requests
+import configparser
 from inky import InkyWHAT
+from datetime import datetime
 from PIL import Image, ImageFont, ImageDraw
 from font_source_sans_pro import SourceSansProSemibold
-import os
-# import slack_handler
-# import slack
-# import time
-# import requests
-# import zipfile
-# import matplotlib.pyplot as plt
-# import numpy as np
-import open_weather_handler
 
-root = os.path.dirname(os.path.realpath("../weather_bot.py"))
+root = os.path.dirname(os.path.abspath('what_weather.py.py'))
 
+config = configparser.ConfigParser()
+config.read(root + '/weather/config.ini')
+
+open_weather_api_key = '98e4a007bd3bde27d02a178913ba6a1f'
+one_call = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + config['LOCATION']['lat'] \
+           + '&lon=' + config['LOCATION']['long'] + '&appid=' + config['OW_API']['key']
+
+def get_weather_data(rtn=False):
+    update_time = time.time()
+    # convert to 12 hour time and remove seconds and AM/PM and add space between hour and min
+    update_time = datetime.fromtimestamp(update_time).strftime('%I:%M %p')[:-3]
+    update_time = 'Last Updated: ' + update_time
+    print(update_time)
+
+    raw = requests.get(one_call)
+
+    if raw.status_code != 200:
+        print("Scrape Error")
+        print(raw)
+        raw.close()
+
+    data = raw.json()
+    raw.close()
+    if rtn:
+        return data
+    else: # update global weather_data
+        global weather_data
+        weather_data=data
+
+# weather_data = get_weather_data(True)
+
+
+# ic(weather_data)
+
+
+def get_sunset():
+    sunset = weather_data['current']['sunset']
+    sunset = datetime.fromtimestamp(sunset).strftime('%I:%M %p')
+    return sunset
+
+
+# ic(get_sunset())
+
+def get_sunrise():
+    sunrise = weather_data['current']['sunrise']
+    sunrise = datetime.fromtimestamp(sunrise).strftime('%I:%M %p')
+
+    return sunrise
+
+
+# ic(get_sunrise())
+
+def get_day_length():
+    length_of_day = weather_data['current']['sunset'] - weather_data['current']['sunrise']
+    length_of_day = time.strftime('%H:%M:%S', time.gmtime(length_of_day))[:-3]
+    length_of_day_split = length_of_day.split(':')
+    length_of_day = length_of_day_split[0] + ' hr ' + length_of_day_split[1] + ' min'
+    return length_of_day
+
+
+# ic(get_length_of_day())
+
+def get_moon_rise():
+    moon_rise = weather_data['daily'][0]['moonrise']
+    moon_rise = datetime.fromtimestamp(moon_rise).strftime('%I:%M %p')
+    return moon_rise
+
+
+# ic(get_moon_rise())
+
+def get_moon_set():
+    moon_set = weather_data['daily'][0]['moonset']
+    moon_set = datetime.fromtimestamp(moon_set).strftime('%I:%M %p')
+    return moon_set
+
+
+# ic(get_moon_set())
+
+def get_moon_length():
+    moon_length = weather_data['daily'][0]['moonrise'] - weather_data['daily'][0]['moonset']
+    moon_length = time.strftime('%H:%M:%S', time.gmtime(moon_length))[:-3]
+    moon_length_split = moon_length.split(':')
+    # invert time, ie if time [12, 02] then [11, 58]
+    moon_length_split[0], moon_length_split[1] = str(23 - int(moon_length_split[0])), str(
+        60 - int(moon_length_split[1]))
+
+    moon_length = moon_length_split[0] + ' hr ' + moon_length_split[1] + ' min'
+
+    return moon_length
+
+
+# ic(get_moon_length())
+
+def get_current_weather_description():
+    current_weather = weather_data['current']['weather'][0]['description']
+    return current_weather
+
+
+# ic(get_current_weather_description())
+
+def get_current_weather_icon():  # fix this
+    current_weather_icon = weather_data['current']['weather'][0]['icon']
+    return current_weather_icon
+
+
+def get_current_temp():
+    current_weather_temp = weather_data['current']['temp']
+    # current_weather_temp = round(current_weather_temp - 273.15, 1) # convert to celcius
+    current_weather_temp = round((current_weather_temp - 273.15) * 9 / 5 + 32, 0)  # convert to fahrenheit
+    return current_weather_temp
+
+
+# ic(get_current_weather_temp())
+
+def get_current_feels_like():
+    current_feels_like = weather_data['current']['feels_like']
+    # current_feels_like = round(current_feels_like - 273.15, 1) # convert to celcius
+    current_feels_like = round((current_feels_like - 273.15) * 9 / 5 + 32, 0)  # convert to fahrenheit
+    return current_feels_like
+
+
+# ic(get_current_feels_like())
+
+def get_current_humidity():
+    current_humidity = weather_data['current']['humidity']
+    return current_humidity
+
+
+# ic(get_current_humidity())
+
+def get_current_wind_speed():
+    current_wind_speed = weather_data['current']['wind_speed']
+    return current_wind_speed
+
+
+# ic(get_current_wind_speed())
+
+def get_current_wind_direction():
+    current_wind_direction = weather_data['current']['wind_deg']
+    # convert degrees to cardinal direction
+    current_wind_direction = round(current_wind_direction / 22.5) % 16
+    current_wind_direction = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE',
+                              'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'][current_wind_direction]
+    return current_wind_direction
+
+
+# ic(get_current_wind_direction())
+
+def get_current_clouds():
+    current_clouds = weather_data['current']['clouds']
+    return current_clouds
+
+
+# ic(get_current_clouds())
+
+
+def interprate_pressure(pressure):
+    if pressure <= 980:
+        return "Very Low"
+    elif pressure <= 1000:
+        return "Low"
+    elif pressure <= 1020:
+        return "Moderate"
+    elif pressure <= 1040:
+        return "High"
+    else:
+        return "Very High"
+
+
+def get_current_pressure():
+    current_pressure = weather_data['current']['pressure']
+    return interprate_pressure(current_pressure)
+
+
+# ic(get_current_pressure())
+
+def interprate_visibility(visibility):
+    if visibility <= 1000:
+        return "Very Low"
+    elif visibility <= 3000:
+        return "Low"
+    elif visibility <= 6000:
+        return "Moderate"
+    elif visibility <= 9000:
+        return "High"
+    else:
+        return "Very High"
+
+def get_current_visibility():
+    current_visibility = weather_data['current']['visibility']
+    return interprate_visibility(current_visibility)
+
+
+# ic(get_current_visibility())
+def interprate_uv_index(uv_index):
+    if uv_index <= 2:
+        return "Low"
+    elif uv_index <= 5:
+        return "Moderate"
+    elif uv_index <= 7:
+        return "High"
+    elif uv_index <= 10:
+        return "Very High"
+    else:
+        return "Extreme"
+
+def get_current_uv_index():
+    current_uv_index = weather_data['current']['uvi']
+    return interprate_uv_index(current_uv_index)
+
+
+# ic(get_current_uv_index())
+
+def get_current_dew_point():
+    current_dew_point = weather_data['current']['dew_point']
+    # current_dew_point = round(current_dew_point - 273.15, 1) # convert to celcius
+    current_dew_point = round((current_dew_point - 273.15) * 9 / 5 + 32, 0)  # convert to fahrenheit
+    return current_dew_point
+
+
+# ic(get_current_dew_point())
+
+def graph_weekly_temp():
+    daily_temp, daily_time = [], []
+    for i in range(0, 7):
+        daily_temp.append(weather_data['daily'][i]['temp']['day'])
+        daily_time.append(weather_data['daily'][i]['dt'])
+    daily_temp = [round((x - 273.15) * 9 / 5 + 32, 0) for x in daily_temp]  # convert to fahrenheit
+    daily_temp = [int(x) for x in daily_temp]
+    daily_time = [datetime.fromtimestamp(x).strftime('%a') for x in daily_time]
+    return daily_temp, daily_time
+
+
+# ic(graph_weekly_temp())
+# plt.plot(graph_weekly_temp()[1], graph_weekly_temp()[0])
+
+def get_forecast():
+    day, forecast, high, low, humidity = [], [], [], [], []
+    for i in range(0, 7):
+        forecast.append(weather_data['daily'][i]['weather'][0]['description'])
+        day.append(datetime.fromtimestamp(weather_data['daily'][i]['dt']).strftime('%a'))
+        high.append(weather_data['daily'][i]['temp']['max'])
+        low.append(weather_data['daily'][i]['temp']['min'])
+        humidity.append(weather_data['daily'][i]['humidity'])
+        # convert from kelvin to fahrenheit
+    high = [int(round((x - 273.15) * 9 / 5 + 32, 0)) for x in high]
+    low = [int(round((x - 273.15) * 9 / 5 + 32, 0)) for x in low]
+
+    return day, forecast, high, low, humidity
 
 def read_csv(path):
     with open(path, 'r') as f:
         return f.read()
 
+def graph_minutely_precip():
+    minutely_precip, minutely_time = [], []
+    for i in range(0, 60):
+        minutely_precip.append(weather_data['minutely'][i]['precipitation'])
+        minutely_time.append(weather_data['minutely'][i]['dt'])
+    minutely_precip = [round(x * 0.0393701, 2) for x in minutely_precip]  # convert to inches
+    minutely_time = [datetime.fromtimestamp(x).strftime('%I:%M %p') for x in minutely_time]
+    return minutely_precip, minutely_time
 
-def update():
-    open_weather_handler.get_weather_data()
+def get_aqi_data():
+    aqi_out = []
+    aqi_data = {'pm10': [20, 50,100, 200, 250, 430],
+                'pm2_5': [10, 25, 50, 75, 85, 95],
+                'no2': [40,70,150, 200, 280, 400],
+                'o3': [50, 100, 140, 180, 200, 400],
+                'co': [4400,9400,12400,15400,18400,21400],
+                'so2': [20,80,250,350,400,700],
+                'nh3': [10,20,40,60,80,90],
+                'level': ['good', 'fair', 'moderate', 'bad', 'very bad', 'severe'],
+                'level_num': [1, 2, 3, 4, 5, 6]}
+    aqi_url = 'http://api.openweathermap.org/data/2.5/air_pollution?lat=' + config['LOCATION']['lat'] \
+              + '&lon=' + config['LOCATION']['long'] + '&appid=' + config['OW_API']['key']
+    raw = requests.get(aqi_url)
+    data = raw.json()
+    raw.close()
+    data = data['list'][0]['components']
+    levels = aqi_data['level']
+    total_aqi = 0
+    for i in range(len(data)):
+        cat = list(data.keys())[i]
+        aqi = data[cat]
+        bottom = -0.01 # bottom of the interval
+        try:
+            cat_range = aqi_data[cat]
+            for j in range(len(cat_range)):
+                top = cat_range[j] # top of the interval
+                if bottom < aqi <= top: # if the aqi is in the interval
+                    # print(cat + ': ' + levels[j]) # return the category
+                    aqi_out.append(cat + ': ' + levels[j])
+                    total_aqi += aqi_data['level_num'][j] # add the level number to the total
+                bottom = top # update the bottom of the interval
+        except KeyError: # skips no (nitrogen monoxide) because it's not in the aqi_data dict
+            pass
+    mean_aqi = total_aqi / len(aqi_out)
+    return aqi_out, aqi_data['level'][int(mean_aqi - 1)]
 
-    sun_set                     = open_weather_handler.get_sunset()
-    sun_rise                    = open_weather_handler.get_sunrise()
-    moon_rise                   = open_weather_handler.get_moon_rise()
-    moon_set                    = open_weather_handler.get_moon_set()
-    moon_length                 = open_weather_handler.get_moon_length()
-    day_length                  = open_weather_handler.get_day_length()
-    current_weather_description = open_weather_handler.get_current_weather_description()
-    current_weather_icon        = open_weather_handler.get_current_weather_icon()
-    current_temp                = open_weather_handler.get_current_temp()
-    current_feels_like          = open_weather_handler.get_current_feels_like()
-    current_humidity            = open_weather_handler.get_current_humidity()
-    current_wind_speed          = open_weather_handler.get_current_wind_speed()
-    current_wind_direction      = open_weather_handler.get_current_wind_direction()
-    current_clouds              = open_weather_handler.get_current_clouds()
-    current_pressure            = open_weather_handler.get_current_pressure()
-    current_visibility          = open_weather_handler.get_current_visibility()
-    current_uv_index            = open_weather_handler.get_current_uv_index()
-    current_dew_point           = open_weather_handler.get_current_dew_point()
-    weekly_temps                = open_weather_handler.graph_weekly_temp()
-    minutely_precip             = open_weather_handler.graph_minutely_precip()
-    # eight_hour_forecast         = open_weather_handler.get_eight_hour_forcast()
-    aqi_data, aqi_mean          = open_weather_handler.get_aqi_data()
+def create_image(inky_display, color="black"):
+    get_weather_data()
 
-    inky_display = InkyWHAT("black")
+    sun_set                     = get_sunset()
+    sun_rise                    = get_sunrise()
+    moon_rise                   = get_moon_rise()
+    moon_set                    = get_moon_set()
+    moon_length                 = get_moon_length()
+    day_length                  = get_day_length()
+    current_weather_description = get_current_weather_description()
+    current_weather_icon        = get_current_weather_icon()
+    current_temp                = get_current_temp()
+    current_feels_like          = get_current_feels_like()
+    current_humidity            = get_current_humidity()
+    current_wind_speed          = get_current_wind_speed()
+    current_wind_direction      = get_current_wind_direction()
+    current_clouds              = get_current_clouds()
+    current_pressure            = get_current_pressure()
+    current_visibility          = get_current_visibility()
+    current_uv_index            = get_current_uv_index()
+    current_dew_point           = get_current_dew_point()
+    weekly_temps                = graph_weekly_temp()
+    minutely_precip             = graph_minutely_precip()
+    # eight_hour_forecast         = get_eight_hour_forcast()
+    aqi_data, aqi_mean          = get_aqi_data()
+
     inky_display.set_border(inky_display.WHITE)
     img = Image.new("P", (inky_display.WIDTH, inky_display.HEIGHT))
     img = img.rotate(180)  # flip the image so it's right side up
@@ -58,9 +346,18 @@ def update():
     font_xxlarge = ImageFont.truetype(SourceSansProSemibold, 32)
 
     # draw current tem in the top left corner, write 'current weather', with a timestamp
-    draw.text((10, 0), "Current Weather " + str(datetime.now()), inky_display.BLACK, font=font_small)
-    draw.text((10, 10), str(int(current_temp)) + "°F", inky_display.BLACK,
-              font=font_xxlarge)  # big font for temp
+    if color == "black":
+        draw.text((10, 0), "Current Weather " + str(datetime.now()), inky_display.BLACK, font=font_small)
+        draw.text((10, 10), str(int(current_temp)) + "°F", inky_display.BLACK,
+                  font=font_xxlarge)  # big font for temp
+    elif color == "yellow":
+        draw.text((10, 0), "Current Weather " + str(datetime.now()), inky_display.YELLOW, font=font_small)
+        draw.text((10, 10), str(int(current_temp)) + "°F", inky_display.YELLOW,
+                  font=font_xxlarge)
+    else:
+        draw.text((10, 0), "Current Weather " + str(datetime.now()), inky_display.RED, font=font_small)
+        draw.text((10, 10), str(int(current_temp)) + "°F", inky_display.RED,
+                  font=font_xxlarge)
 
     # # draw sunrise and sunset
     draw.text((160, 10), "Sunrise: " + sun_rise + " Sunset: " + sun_set, inky_display.BLACK,
@@ -164,13 +461,5 @@ def update():
     #
     # # Display image on Inky wHAT in the botom left corner
     # img.paste(graph_img, (0, 75))
-    img = img.rotate(180)
-    inky_display.set_image(img)
-
-    inky_display.show()
-
-
-
-if __name__ == "__main__":
-    #get_weather_update()
-    update()
+    print('Temperature: ' + str(current_temp))
+    return img

@@ -4,5 +4,4 @@
 cd /home/pi/Code/Inky/deviant_art
 
 # run the script
-python display_deviation.py
-
+python3 deviant_art_scraper.py
