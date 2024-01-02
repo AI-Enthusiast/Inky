@@ -18,8 +18,9 @@ def get_image(drive):
     # return random image
     image_choice = random.choice(images)
     print('chose image: ' + image_choice)
-    # make sure it's a jpg
-    if image_choice[-3:] != 'jpg':
+    good_filetypes = ['jpg', 'jpeg', 'png']
+    # make sure it's a jpg, jpeg, or png
+    if image_choice[-3:] not in good_filetypes:
         print('image is not a jpg, choosing another')
         return get_image(drive)
     return image_choice
