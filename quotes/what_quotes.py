@@ -62,14 +62,15 @@ def create_image(inky_display, color="black"):
 
         # make sure the quote is not just someone's name
         paren_removed = quote.split('(')[0]
-        if paren_removed.count(" ") < 3:
+        if paren_removed.count(" ") < 3 or paren_removed.split(" ")[0][-1] == ',':
             print("Rejected quote: " + quote, "\t - " + person + "\n")
             return get_quote(person)
         else:
 
             # make sure the quote does not contain any unwanted words
             unwanted_subjects = ['Queen', 'King', 'England', 'British', 'British Empire', 'Christ', 'Jesus', 'God',
-                                 'Religion', 'Christianity', 'Catholicism', 'Catholic', 'Protestant', 'Protestantism']
+                                 'Religion', 'Christianity', 'Catholicism', 'Catholic', 'Protestant',
+                                 'Protestantism', 'Cromwell']
             for subject in unwanted_subjects:
                 if subject in quote:
                     print("Rejected quote: " + quote, "\t - " + person + "\n")
