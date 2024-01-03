@@ -27,6 +27,10 @@ def get_image(drive):
 
 def create_image(inky_display, color='black'):
     drive = get_drive()
+    if drive == None:
+        print('no drive found')
+        return None
+
     image = get_image(drive)
 
     inky_display.set_border(inky_display.WHITE)
