@@ -62,7 +62,7 @@ def create_image(inky_display, color="black"):
 
         # make sure the quote is not just someone's name
         paren_removed = quote.split('(')[0]
-        if paren_removed.count(" ") < 3 or paren_removed.split(" ")[0][-1] == ',':
+        if paren_removed.count(" ") < 5 or paren_removed.split(" ")[0][-1] == ',':
             print("Rejected quote: " + quote, "\t - " + person + "\n")
             return get_quote(person)
         else:
