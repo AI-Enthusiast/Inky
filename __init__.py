@@ -32,6 +32,10 @@ choices = {"news": display_news,
            "slideshow4": display_slideshow,
            "quote": display_quote,
            "quote": display_quote}
-choice = random.choice(list(choices.keys()))
-choices[choice](inky_display, color)
-
+img = None
+while img is None:
+    choice = random.choice(list(choices.keys()))
+    img    = choices[choice](inky_display, color)
+img = img.rotate(180)  # flip the image so it's right side up
+inky_display.set_image(img)
+inky_display.show()
