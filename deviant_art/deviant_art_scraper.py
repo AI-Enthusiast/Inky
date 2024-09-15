@@ -43,7 +43,7 @@ def create_new_folder(date_curr):
 
 
 def get_challenge_word(soup_raw):
-    word = soup_raw.find('h2', class_="_31Qjh").text
+    word = soup_raw.find('h2', class_="_2tYrM").text
     return word
 
 
@@ -62,7 +62,13 @@ if __name__ == '__main__':
 
     remove_oldest_folder(date_current)
     create_new_folder(date_current)
-    challenge_word = get_challenge_word(soup)
+    challenge_word = ''
+    try:
+        challenge_word = get_challenge_word(soup)
+        print('downloading images for ' + challenge_word)
+    except:
+        print('no challenge word found')
+
     # new_url  = 'https://www.deviantart.com/tag/' + challenge_word + '?order=all-time'
     # page = requests.get(new_url)
     # soup = BeautifulSoup(page.content, 'html.parser')
